@@ -1,4 +1,4 @@
-# portal_final_v2.py
+# portal_final_v3.py
 import streamlit as st
 
 # --- Configuração Inicial da Página ---
@@ -175,7 +175,10 @@ def render_login_page():
     st.markdown('<div class="login-box">', unsafe_allow_html=True)
     st.markdown('<h1>🚀 Portal de Análises</h1>', unsafe_allow_html=True)
     st.markdown('<p class="subtitle">Acesse as ferramentas de análise de forma rápida e organizada. Por favor, autentique-se com sua conta Google para continuar.</p>', unsafe_allow_html=True)
-    st.login("google", label="Entrar com Google", use_container_width=True)
+    
+    # MODIFICADO: Removido o argumento "google"
+    st.login(label="Entrar com Google", use_container_width=True)
+    
     st.markdown('</div></div>', unsafe_allow_html=True)
 
 def render_portal():
@@ -223,7 +226,6 @@ def render_portal():
         st.info("🔍 Nenhum aplicativo encontrado para o termo buscado.")
 
 # --- Lógica Principal do Aplicativo ---
-# MODIFICADO: Adicionada verificação de segurança com hasattr()
 is_authenticated = hasattr(st, 'user') and hasattr(st.user, 'is_logged_in') and st.user.is_logged_in
 
 if not is_authenticated:
