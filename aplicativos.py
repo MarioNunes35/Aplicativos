@@ -1,4 +1,4 @@
-# portal_final.py
+# portal_final_v2.py
 import streamlit as st
 
 # --- Configuração Inicial da Página ---
@@ -175,15 +175,11 @@ def render_login_page():
     st.markdown('<div class="login-box">', unsafe_allow_html=True)
     st.markdown('<h1>🚀 Portal de Análises</h1>', unsafe_allow_html=True)
     st.markdown('<p class="subtitle">Acesse as ferramentas de análise de forma rápida e organizada. Por favor, autentique-se com sua conta Google para continuar.</p>', unsafe_allow_html=True)
-    
-    # O botão de login do Streamlit é a única ação necessária
     st.login("google", label="Entrar com Google", use_container_width=True)
-    
     st.markdown('</div></div>', unsafe_allow_html=True)
 
 def render_portal():
     """Mostra o portal principal com os aplicativos."""
-    # Header
     st.markdown(f'''
         <div class="nav">
             <span class="brand">
@@ -197,21 +193,17 @@ def render_portal():
         </div>
     ''', unsafe_allow_html=True)
 
-    # Botão de Logout na Sidebar
     with st.sidebar:
         st.write(f"Logado como: **{st.user.email}**")
         st.logout("Sair", use_container_width=True)
 
-    # Título e busca
     st.markdown("### Seus aplicativos")
     st.markdown('<p class="subtitle">Acesse as ferramentas de análise de forma rápida e organizada</p>', unsafe_allow_html=True)
     search_query = st.text_input("Buscar", placeholder="🔍 Buscar aplicativos...", label_visibility="collapsed")
     
-    # Filtrar apps
     query = search_query.lower().strip()
     filtered_apps = [app for app in APPS if query in app["name"].lower() or query in app["desc"].lower()]
 
-    # Renderizar cards
     if filtered_apps:
         cols = st.columns(3)
         for i, app in enumerate(filtered_apps):
@@ -231,7 +223,10 @@ def render_portal():
         st.info("🔍 Nenhum aplicativo encontrado para o termo buscado.")
 
 # --- Lógica Principal do Aplicativo ---
-if not st.user.is_logged_in:
+# MODIFICADO: Adicionada verificação de segurança com hasattr()
+is_authenticated = hasattr(st, 'user') and hasattr(st.user, 'is_logged_in') and st.user.is_logged_in
+
+if not is_authenticated:
     render_login_page()
 else:
     if is_allowed(st.user.email):
