@@ -177,7 +177,9 @@ def render_login_page():
     st.markdown('<p class="subtitle">Acesse as ferramentas de análise de forma rápida e organizada. Por favor, autentique-se com sua conta Google para continuar.</p>', unsafe_allow_html=True)
     
     # MODIFICADO: Removido o argumento "google"
-    st.login()
+    if st.button("Entrar com Google", use_container_width=True):
+        st.login()
+        st.stop()
     
     st.markdown('</div></div>', unsafe_allow_html=True)
 
@@ -198,7 +200,7 @@ def render_portal():
 
     with st.sidebar:
         st.write(f"Logado como: **{st.user.email}**")
-        st.logout()
+        st.logout("Sair", use_container_width=True)
 
     st.markdown("### Seus aplicativos")
     st.markdown('<p class="subtitle">Acesse as ferramentas de análise de forma rápida e organizada</p>', unsafe_allow_html=True)
@@ -236,4 +238,6 @@ else:
     else:
         st.error(f"🚫 Acesso Negado. O e-mail **{st.user.email}** não tem permissão para acessar este portal.")
         st.warning("Por favor, contate o administrador para solicitar acesso.")
-        st.logout()
+        if st.button("Sair"):
+            st.logout()
+            st.stop()
